@@ -14,12 +14,12 @@ describe User do
     @user.should_not be_valid
   end
 
-  it 'converts login to lowercase before saving' do
-    @user.save!
+  it 'converts login to lowercase before validating' do
+    @user.valid?
     @user.login.should eq(@user.login.downcase)
   end
 
-  it 'must have unique login' do
+  it 'has unique login' do
     @user.save!
     another_user = User.new login: 'Random_guy', password: 'aaa', password_confirmation: 'aaa'
     another_user.should_not be_valid
