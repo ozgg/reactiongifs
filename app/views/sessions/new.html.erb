@@ -3,5 +3,5 @@
     <%= text_field_tag :login, params[:login], required: true %>
     <%= label_tag :password, 'password' %>
     <%= password_field_tag :password, params[:password], required: true %>
-    <%= button_tag type: :submit %>
+    <%= button_tag 'login', type: :submit %>
 <% end %>
