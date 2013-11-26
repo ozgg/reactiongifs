@@ -1,0 +1,7 @@
+<%= form_tag do %>
+    <%= label_tag :login, 'login' %>
+    <%= text_field_tag :login, params[:login], required: true %>
+    <%= label_tag :password, 'password' %>
+    <%= password_field_tag :password, params[:password], required: true %>
+    <%= button_tag type: :submit %>
+<% end %>
