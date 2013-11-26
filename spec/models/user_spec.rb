@@ -9,7 +9,7 @@ describe User do
     @user.should be_valid
   end
 
-  it 'is invalid when login does not match pattern /\A[a-z0-9_]{1,30}\z/i' do
+  it 'is invalid when login does not match pattern /\A[a-z0-9_]{1,30}\z/' do
     @user.login = 'bad login'
     @user.should_not be_valid
   end
