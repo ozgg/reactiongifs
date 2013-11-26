@@ -1,7 +1,11 @@
 Reactiongifs::Application.routes.draw do
   controller :sessions do
     get 'login' => :new
+    post 'login' => :create
+    delete 'logout' => :destroy
   end
+
+  root 'index#index'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
