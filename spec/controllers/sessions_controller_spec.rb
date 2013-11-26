@@ -12,19 +12,19 @@ describe SessionsController do
     describe 'get new' do
       it 'renders view with form' do
         get :new
-        response.should render_template('sessions/new')
+        expect(response).to render_template('sessions/new')
       end
     end
 
     describe 'delete destroy' do
       it 'redirects to root page' do
         delete :destroy
-        response.should redirect_to(root_path)
+        expect(response).to redirect_to(root_path)
       end
 
       it 'adds flash notice "session.not_logged_in"' do
         delete :destroy
-        flash[:notice].should eq('session.not_logged_in')
+        expect(flash[:notice]).to eq('session.not_logged_in')
       end
     end
   end
@@ -35,15 +35,15 @@ describe SessionsController do
     end
 
     it 'creates session with user id' do
-      session[:user_id].should eq(user.id)
+      expect(session[:user_id]).to eq(user.id)
     end
 
     it 'redirects to root page' do
-      response.should redirect_to(root_path)
+      expect(response).to redirect_to(root_path)
     end
 
     it 'adds flash notice "session.logged_in_successfully"' do
-      flash[:notice].should eq('session.logged_in_successfully')
+      expect(flash[:notice]).to eq('session.logged_in_successfully')
     end
   end
 
@@ -53,11 +53,11 @@ describe SessionsController do
     end
 
     it 'redirects to login page' do
-      response.should redirect_to(login_path)
+      expect(response).to redirect_to(login_path)
     end
 
     it 'adds flash notice "session.invalid_credentials"' do
-      flash[:notice].should eq('session.invalid_credentials')
+      expect(flash[:notice]).to eq('session.invalid_credentials')
     end
   end
 
@@ -72,11 +72,11 @@ describe SessionsController do
       end
 
       it 'redirects to root page' do
-        response.should redirect_to(root_path)
+        expect(response).to redirect_to(root_path)
       end
 
       it 'adds flash notice "session.already_logged_in"' do
-        flash[:notice].should eq('session.already_logged_in')
+        expect(flash[:notice]).to eq('session.already_logged_in')
       end
     end
 
@@ -86,11 +86,11 @@ describe SessionsController do
       end
 
       it 'redirects to root page' do
-        response.should redirect_to(root_path)
+        expect(response).to redirect_to(root_path)
       end
 
       it 'adds flash notice "session.already_logged_in"' do
-        flash[:notice].should eq('session.already_logged_in')
+        expect(flash[:notice]).to eq('session.already_logged_in')
       end
     end
 
@@ -100,15 +100,15 @@ describe SessionsController do
       end
 
       it 'deletes user id from session' do
-        session[:user_id].should be_nil
+        expect(session[:user_id]).to be_nil
       end
 
       it 'redirects to root page' do
-        response.should redirect_to(root_path)
+        expect(response).to redirect_to(root_path)
       end
 
       it 'adds flash notice "session.logged_out"' do
-        flash[:notice].should eq('session.logged_out')
+        expect(flash[:notice]).to eq('session.logged_out')
       end
     end
   end
