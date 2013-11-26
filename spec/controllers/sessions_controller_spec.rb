@@ -3,7 +3,10 @@ require 'spec_helper'
 describe SessionsController do
   context 'Anonymous user' do
     describe 'get new' do
-      it 'shows authorization form'
+      it 'renders view with form' do
+        get :new
+        response.should render_template('sessions/new')
+      end
     end
 
     describe 'post create' do
