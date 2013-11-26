@@ -62,20 +62,54 @@ describe SessionsController do
   end
 
   context 'when user is logged in' do
+    before :each do
+      session[:user_id] = user.id
+    end
+
     describe 'get new' do
-      it 'redirects to root page'
-      it 'adds flash notice "session.already_logged_in"'
+      before :each do
+        get :new
+      end
+
+      it 'redirects to root page' do
+        response.should redirect_to(root_path)
+      end
+
+      it 'adds flash notice "session.already_logged_in"' do
+        flash[:notice].should eq('session.already_logged_in')
+      end
     end
 
     describe 'post create' do
-      it 'redirects to root page'
-      it 'adds flash notice "session.already_logged_in"'
+      before :each do
+        post :create
+      end
+
+      it 'redirects to root page' do
+        response.should redirect_to(root_path)
+      end
+
+      it 'adds flash notice "session.already_logged_in"' do
+        flash[:notice].should eq('session.already_logged_in')
+      end
     end
 
     describe 'delete destroy' do
-      it 'deletes user id from session'
-      it 'redirects to root page'
-      it 'adds flash notice "session.logged_out"'
+      before :each do
+        delete :destroy
+      end
+
+      it 'deletes user id from session' do
+        session[:user_id].should be_nil
+      end
+
+      it 'redirects to root page' do
+        response.should redirect_to(root_path)
+      end
+
+      it 'adds flash notice "session.logged_out"' do
+        flash[:notice].should eq('session.logged_out')
+      end
     end
   end
 end
