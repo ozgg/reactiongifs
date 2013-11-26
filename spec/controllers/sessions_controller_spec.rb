@@ -22,9 +22,9 @@ describe SessionsController do
         response.should redirect_to(root_path)
       end
 
-      it 'adds flash message "Вы ещё не вошли"' do
+      it 'adds flash notice "session.not_logged_in"' do
         delete :destroy
-        flash[:notice].should eq('Вы ещё не вошли')
+        flash[:notice].should eq('session.not_logged_in')
       end
     end
   end
@@ -42,31 +42,31 @@ describe SessionsController do
       response.should redirect_to(root_path)
     end
 
-    it 'adds flash message "Вы успешно вошли"' do
-      flash[:notice].should eq('Вы успешно вошли')
+    it 'adds flash notice "session.logged_in_successfully"' do
+      flash[:notice].should eq('session.logged_in_successfully')
     end
   end
 
   context 'Unsuccessful login' do
     it 'redirects to login page'
-    it 'adds flash message "invalid login"'
+    it 'adds flash notice "session.invalid_credentials"'
   end
 
   context 'when user is logged in' do
     describe 'get new' do
       it 'redirects to root page'
-      it 'adds flash message "already authorized"'
+      it 'adds flash notice "session.already_logged_in"'
     end
 
     describe 'post create' do
       it 'redirects to root page'
-      it 'adds flash message "already authorized"'
+      it 'adds flash notice "session.already_logged_in"'
     end
 
     describe 'delete destroy' do
       it 'deletes user id from session'
       it 'redirects to root page'
-      it 'adds flash message "logged out"'
+      it 'adds flash notice "session.logged_out"'
     end
   end
 end

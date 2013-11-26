@@ -9,7 +9,7 @@ class SessionsController < ApplicationController
     user = User.find_by_login params[:login]
     if user && user.authenticate(params[:password])
       session[:user_id] = user.id
-      flash[:notice] = 'Вы успешно вошли'
+      flash[:notice] = 'session.logged_in_successfully'
     end
     redirect_to root_path
   end
@@ -17,7 +17,7 @@ class SessionsController < ApplicationController
   # delete /logout
   def destroy
     if session[:user_id].nil?
-      flash[:notice] = 'Вы ещё не вошли'
+      flash[:notice] = 'session.not_logged_in'
     end
     redirect_to root_path
   end
