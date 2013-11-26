@@ -48,8 +48,17 @@ describe SessionsController do
   end
 
   context 'Unsuccessful login' do
-    it 'redirects to login page'
-    it 'adds flash notice "session.invalid_credentials"'
+    before :each do
+      post :create, login: user.login, password: 'incorrect'
+    end
+
+    it 'redirects to login page' do
+      response.should redirect_to(login_path)
+    end
+
+    it 'adds flash notice "session.invalid_credentials"' do
+      flash[:notice].should eq('session.invalid_credentials')
+    end
   end
 
   context 'when user is logged in' do
