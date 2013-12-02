@@ -39,4 +39,15 @@ RSpec.configure do |config|
   # the seed, which is printed after each run.
   #     --seed 1234
   config.order = 'random'
+
+  config.after(:all) do
+    if Rails.env.test? || Rails.env.cucumber?
+      tmp = Reaction.new(image: Rack::Test::UploadedFile.new('spec/support/images/magic.gif', 'image/gif'))
+
+      store_path = File.dirname(File.dirname(tmp.image.url))
+      temp_path  = tmp.image.cache_dir
+      FileUtils.rm_rf(Dir["#{Rails.root}/public/#{store_path}/[^.]*"])
+      FileUtils.rm_rf(Dir["#{temp_path}/[^.]*"])
+    end
+  end
 end
