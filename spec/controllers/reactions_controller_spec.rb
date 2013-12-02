@@ -1,15 +1,41 @@
 require 'spec_helper'
 
 describe ReactionsController do
+  let (:user) { User.create!(login: 'some_guy', password: '123', password_confirmation: '123') }
+  let (:reaction_parameters) do
+    {
+        user:  user,
+        title: 'Something happens',
+        image: Rack::Test::UploadedFile.new('spec/support/images/magic.gif'),
+    }
+  end
+
   context "User is logged in" do
+    before :each do
+      session[:user_id] = user.id
+    end
+
     describe "get new" do
-      it "renders view with reaction form"
+      it "renders view with reaction form" do
+        get :new
+        expect(response).to render_template('reactions/new')
+      end
     end
 
     describe "post create" do
-      it "creates new reaction"
-      it "redirects to reaction page"
-      it "adds flash message 'Реакция добавлена'"
+      it "creates new reaction" do
+        expect{post :create, reaction: reaction_parameters}.to change(Reaction, :count).by(1)
+      end
+
+      it "redirects to reaction page" do
+        post :create, { reaction: reaction_parameters }
+        expect(response).to redirect_to(Reaction.last)
+      end
+
+      it "adds flash message 'Реакция добавлена'" do
+        post :create, { reaction: reaction_parameters }
+        expect(flash[:message]).to eq('Реакция добавлена')
+      end
     end
 
     describe "patch update" do
@@ -44,6 +70,18 @@ describe ReactionsController do
   context "Any user" do
     describe "get show" do
       it "renders view with reaction"
+    end
+  end
+
+  context "When has errors" do
+    describe "Invalid creation parameters" do
+      it "renders new reaction form"
+      it "leaves reactions table intact"
+    end
+
+    describe "Updating image" do
+      it "renders edited reaction form"
+      it "leaves reaction intact"
     end
   end
 end

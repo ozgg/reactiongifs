@@ -5,6 +5,8 @@ Reactiongifs::Application.routes.draw do
     delete 'logout' => :destroy
   end
 
+  resources :reactions
+
   root 'index#index'
 
   # The priority is based upon order of creation: first created -> highest priority.
