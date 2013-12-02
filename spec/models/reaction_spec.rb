@@ -37,6 +37,6 @@ describe Reaction do
 
   it "can have only image/gif as image" do
     reaction.image = Rack::Test::UploadedFile.new('spec/support/images/man.jpg', 'image/jpg')
-    expect{reaction.save}.not_to change{ reaction.image }
+    expect(reaction).not_to be_valid
   end
 end
