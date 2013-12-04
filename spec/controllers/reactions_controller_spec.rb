@@ -1,14 +1,15 @@
 require 'spec_helper'
 
 describe ReactionsController do
-  let (:user) { User.create!(login: 'some_guy', password: '123', password_confirmation: '123') }
-  let (:reaction_parameters) do
+  let(:user) { User.create!(login: 'some_guy', password: '123', password_confirmation: '123') }
+  let(:reaction_parameters) do
     {
         user:  user,
         title: 'Something happens',
         image: Rack::Test::UploadedFile.new('spec/support/images/magic.gif'),
     }
   end
+  let(:reaction) { Reaction.create!(reaction_parameters) }
 
   context "User is logged in" do
     before :each do
@@ -39,8 +40,26 @@ describe ReactionsController do
     end
 
     describe "patch update" do
-      it "updates reaction title"
-      it "ignores new reaction image"
+      it "updates reaction title" do
+        patch :update, id: reaction, reaction: { title: 'new title' }
+        reaction.reload
+        expect(reaction.title).to eq('new title')
+      end
+
+      it "ignores new reaction image" do
+        parameters = {
+            id: reaction,
+            reaction: {
+                image: Rack::Test::UploadedFile.new('spec/support/images/magic.gif')
+            }
+        }
+        expect{patch :update, parameters}.not_to change(reaction, :image)
+      end
+
+      it "redirects to reaction page" do
+        patch :update, id: reaction, reaction: { title: 'new title' }
+        expect(response).to redirect_to(reaction)
+      end
     end
 
     describe "delete destroy" do

@@ -1,4 +1,5 @@
 class ReactionsController < ApplicationController
+  before_action :set_reaction, only: [:show, :update]
 
   # get /reactions/new
   def new
@@ -15,7 +16,13 @@ class ReactionsController < ApplicationController
 
   # get /reactions/:id
   def show
+  end
 
+  # patch /reactions/:id
+  def update
+    if @reaction.update(update_parameters)
+      redirect_to @reaction
+    end
   end
 
 protected
@@ -23,4 +30,11 @@ protected
     params.require(:reaction).permit(:title, :image).merge(user: current_user)
   end
 
+  def update_parameters
+    params.require(:reaction).permit(:title)
+  end
+
+  def set_reaction
+    @reaction = Reaction.find params[:id]
+  end
 end
