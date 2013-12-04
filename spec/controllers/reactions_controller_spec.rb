@@ -60,12 +60,25 @@ describe ReactionsController do
         patch :update, id: reaction, reaction: { title: 'new title' }
         expect(response).to redirect_to(reaction)
       end
+
+      it "adds flash message 'Реакция обновлена'"
     end
 
     describe "delete destroy" do
-      it "removes reaction from database"
-      it "redirects to root page"
-      it "adds flash message 'Реакция удалена'"
+      it "removes reaction from database" do
+        delete :destroy, id: reaction
+        expect{reaction.reload}.to raise_error(ActiveRecord::RecordNotFound)
+      end
+
+      it "redirects to root page" do
+        delete :destroy, id: reaction
+        expect(response).to redirect_to(root_path)
+      end
+
+      it "adds flash message 'Реакция удалена'" do
+        delete :destroy, id: reaction
+        expect(flash[:notice]).to eq('Реакция удалена')
+      end
     end
   end
 

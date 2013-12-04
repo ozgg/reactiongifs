@@ -1,5 +1,5 @@
 class ReactionsController < ApplicationController
-  before_action :set_reaction, only: [:show, :update]
+  before_action :set_reaction, only: [:show, :update, :destroy]
 
   # get /reactions/new
   def new
@@ -22,6 +22,14 @@ class ReactionsController < ApplicationController
   def update
     if @reaction.update(update_parameters)
       redirect_to @reaction
+    end
+  end
+
+  # delete /reactions/:id
+  def destroy
+    if @reaction.destroy
+      flash[:notice] = 'Реакция удалена'
+      redirect_to root_path
     end
   end
 
