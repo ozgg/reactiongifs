@@ -1,10 +1,6 @@
 class ReactionsController < ApplicationController
   before_action :restrict_access, except: [:show]
-  before_action :set_reaction, only: [:show, :update, :destroy]
-
-  # get /reactions/new
-  def new
-  end
+  before_action :set_reaction, only: [:show, :update, :edit, :destroy]
 
   # post /reactions
   def create
@@ -13,10 +9,6 @@ class ReactionsController < ApplicationController
       flash[:message] = 'Реакция добавлена'
       redirect_to @reaction
     end
-  end
-
-  # get /reactions/:id
-  def show
   end
 
   # patch /reactions/:id

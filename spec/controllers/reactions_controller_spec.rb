@@ -17,7 +17,7 @@ describe ReactionsController do
     end
 
     describe "get new" do
-      it "renders view with reaction form" do
+      it "renders reactions/new view" do
         get :new
         expect(response).to render_template('reactions/new')
       end
@@ -29,13 +29,25 @@ describe ReactionsController do
       end
 
       it "redirects to reaction page" do
-        post :create, { reaction: reaction_parameters }
+        post :create, reaction: reaction_parameters
         expect(response).to redirect_to(Reaction.last)
       end
 
       it "adds flash message 'Реакция добавлена'" do
-        post :create, { reaction: reaction_parameters }
+        post :create, reaction: reaction_parameters
         expect(flash[:message]).to eq('Реакция добавлена')
+      end
+    end
+
+    describe "get edit" do
+      it "renders reactions/edit view" do
+        get :edit, id: reaction.id
+        expect(response).to render_template('reactions/edit')
+      end
+
+      it "assigns @reaction" do
+        get :edit, id: reaction.id
+        expect(assigns[:reaction]).to eq(reaction)
       end
     end
 
@@ -50,7 +62,7 @@ describe ReactionsController do
         parameters = {
             id: reaction,
             reaction: {
-                image: Rack::Test::UploadedFile.new('spec/support/images/magic.gif')
+                image: Rack::Test::UploadedFile.new('spec/support/images/magic2.gif')
             }
         }
         expect{patch :update, parameters}.not_to change(reaction, :image)
@@ -123,6 +135,14 @@ describe ReactionsController do
 
       it_should_behave_like "restricted area"
     end
+
+    describe "get edit" do
+      before :each do
+        get :edit, id: reaction.id
+      end
+
+      it_should_behave_like "restricted area"
+    end
   end
 
   context "Any user" do
@@ -135,7 +155,7 @@ describe ReactionsController do
         expect(response).to render_template('reactions/show')
       end
 
-      it "sets reaction for view" do
+      it "assigns @reaction" do
         expect(assigns[:reaction]).to eq(reaction)
       end
     end
