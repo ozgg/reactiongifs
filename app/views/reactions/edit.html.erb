@@ -1,0 +1,7 @@
+<%= form_for(@reaction) do |f| %>
+    <%= f.label :title %><br />
+    <%= f.text_field :title, required: true, size: 70 %>
+    <%= f.submit %>
+<% end %>
+
+<%= image_tag @reaction.image.url, alt: @reaction.title %>

@@ -1,0 +1,7 @@
+<%= form_for(Reaction.new) do |f| %>
+    <%= f.label :title %><br />
+    <%= f.text_field :title, required: true, size: 70 %>
+    <%= f.label :image %><br />
+    <%= f.file_field :image, required: true %>
+    <%= f.button 'Добавить реакцию', type: :submit %>
+<% end %>
