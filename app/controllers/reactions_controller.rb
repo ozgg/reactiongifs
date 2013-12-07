@@ -21,6 +21,7 @@ class ReactionsController < ApplicationController
   # patch /reactions/:id
   def update
     if @reaction.update(update_parameters)
+      flash[:notice] = 'Реакция обновлена'
       redirect_to @reaction
     end
   end

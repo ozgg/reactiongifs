@@ -61,7 +61,10 @@ describe ReactionsController do
         expect(response).to redirect_to(reaction)
       end
 
-      it "adds flash message 'Реакция обновлена'"
+      it "adds flash message 'Реакция обновлена'" do
+        patch :update, id: reaction, reaction: { title: 'new title' }
+        expect(flash[:notice]).to eq('Реакция обновлена')
+      end
     end
 
     describe "delete destroy" do
@@ -101,19 +104,17 @@ describe ReactionsController do
 
   context "Any user" do
     describe "get show" do
-      it "renders view with reaction"
-    end
-  end
+      before :each do
+        get :show, id: reaction.id
+      end
 
-  context "When has errors" do
-    describe "Invalid creation parameters" do
-      it "renders new reaction form"
-      it "leaves reactions table intact"
-    end
+      it "renders view with reaction" do
+        expect(response).to render_template('reactions/show')
+      end
 
-    describe "Updating image" do
-      it "renders edited reaction form"
-      it "leaves reaction intact"
+      it "sets reaction for view" do
+        expect(assigns[:reaction]).to eq(reaction)
+      end
     end
   end
 end
