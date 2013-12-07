@@ -1,2 +1,13 @@
-<h1>Index#index</h1>
-<p>Find me in app/views/index/index.html.erb</p>
+<% if @reactions.any? %>
+    <ul class="reactions">
+      <% @reactions.each do |reaction| %>
+      <li>
+        <%= reaction.title %>
+        <%= image_tag reaction.image.url %>
+      </li>
+
+      <% end %>
+    </ul>
+<% else %>
+    <div class="notice">Реакций нет</div>
+<% end %>
