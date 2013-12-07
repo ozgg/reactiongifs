@@ -86,19 +86,42 @@ describe ReactionsController do
   end
 
   context "User is not logged in" do
+    before :each do
+      session[:user_id] = nil
+    end
+
+    shared_examples "restricted area" do
+      it "redirects to login page" do
+        expect(response).to redirect_to(login_path)
+      end
+
+      it "adds flash message 'Необходима авторизация'" do
+        expect(flash[:notice]).to eq('Необходима авторизация')
+      end
+    end
+
     describe "get new" do
-      it "redirects to login page"
-      it "adds flash message 'Необходима авторизация'"
+      before :each do
+        get :new
+      end
+
+      it_should_behave_like "restricted area"
     end
 
     describe "post create" do
-      it "redirects to login page"
-      it "adds flash message 'Необходима авторизация'"
+      before :each do
+        post :create
+      end
+
+      it_should_behave_like "restricted area"
     end
 
     describe "patch update" do
-      it "redirects to login page"
-      it "adds flash message 'Необходима авторизация'"
+      before :each do
+        patch :update, id: reaction.id
+      end
+
+      it_should_behave_like "restricted area"
     end
   end
 

@@ -1,4 +1,5 @@
 class ReactionsController < ApplicationController
+  before_action :restrict_access, except: [:show]
   before_action :set_reaction, only: [:show, :update, :destroy]
 
   # get /reactions/new
@@ -45,5 +46,12 @@ protected
 
   def set_reaction
     @reaction = Reaction.find params[:id]
+  end
+
+  def restrict_access
+    if current_user.nil?
+      flash[:notice] = 'Необходима авторизация'
+      redirect_to login_path
+    end
   end
 end
