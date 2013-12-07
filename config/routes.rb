@@ -1,4 +1,5 @@
 Reactiongifs::Application.routes.draw do
+  get "index/index"
   controller :sessions do
     get 'login' => :new
     post 'login' => :create
