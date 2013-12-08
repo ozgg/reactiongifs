@@ -9,11 +9,21 @@ describe ReactionsController do
         image: Rack::Test::UploadedFile.new('spec/support/images/magic.gif'),
     }
   end
-  let(:reaction) { Reaction.create!(reaction_parameters) }
+  let!(:reaction) { Reaction.create!(reaction_parameters) }
 
   context "User is logged in" do
-    before :each do
-      session[:user_id] = user.id
+    before(:each) { session[:user_id] = user.id }
+
+    describe "get index" do
+      before(:each) { get :index }
+
+      it "renders reactions/index view" do
+        expect(response).to render_template('reactions/index')
+      end
+
+      it "assigns @reactions" do
+        expect(assigns[:reactions]).to include(reaction)
+      end
     end
 
     describe "get new" do
@@ -98,9 +108,7 @@ describe ReactionsController do
   end
 
   context "User is not logged in" do
-    before :each do
-      session[:user_id] = nil
-    end
+    before(:each) { session[:user_id] = nil }
 
     shared_examples "restricted area" do
       it "redirects to login page" do
@@ -113,33 +121,31 @@ describe ReactionsController do
     end
 
     describe "get new" do
-      before :each do
-        get :new
-      end
+      before(:each) { get :new }
 
       it_should_behave_like "restricted area"
     end
 
     describe "post create" do
-      before :each do
-        post :create
-      end
+      before(:each) { post :create }
 
       it_should_behave_like "restricted area"
     end
 
     describe "patch update" do
-      before :each do
-        patch :update, id: reaction.id
-      end
+      before(:each) { patch :update, id: reaction.id }
 
       it_should_behave_like "restricted area"
     end
 
     describe "get edit" do
-      before :each do
-        get :edit, id: reaction.id
-      end
+      before(:each) { get :edit, id: reaction.id }
+
+      it_should_behave_like "restricted area"
+    end
+
+    describe "get index" do
+      before(:each) { get :index }
 
       it_should_behave_like "restricted area"
     end
@@ -147,9 +153,7 @@ describe ReactionsController do
 
   context "Any user" do
     describe "get show" do
-      before :each do
-        get :show, id: reaction.id
-      end
+      before(:each) { get :show, id: reaction.id }
 
       it "renders view with reaction" do
         expect(response).to render_template('reactions/show')

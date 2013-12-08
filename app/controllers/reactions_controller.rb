@@ -2,6 +2,13 @@ class ReactionsController < ApplicationController
   before_action :restrict_access, except: [:show]
   before_action :set_reaction, only: [:show, :update, :edit, :destroy]
 
+  # get /reactions
+  def index
+    page = params[:page] || 1
+    
+    @reactions = Reaction.order('id desc').page(page).per(20)
+  end
+
   # post /reactions
   def create
     @reaction = Reaction.new(creation_parameters)
