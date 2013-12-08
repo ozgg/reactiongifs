@@ -11,3 +11,39 @@
  *= require_self
  *= require_tree .
  */
+
+body {
+  font-family: Verdana, Arial, Helvetica, sans-serif;
+  max-width: 1000px;
+
+  & > header {
+    border-bottom: #DADADA solid 1px;
+    padding: 0.5em;
+  }
+
+  & > footer {
+    border-top: #DADADA solid 1px;
+    color: #666666;
+    padding: 0.5em;
+    font-size: 0.8em;
+
+    aside {
+      float: right;
+    }
+  }
+}
+
+h1, h2, h3 {
+  margin: 0;
+  padding: 0;
+}
+
+div.notice {
+  text-align: center;
+  font-weight: bold;
+  border: solid #666666 1px;
+  color: #2E2F30;
+  background: #EFEFEF;
+  padding: 0.5em;
+  margin: 1em 5em;
+}

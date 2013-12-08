@@ -1,14 +1,28 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Reactiongifs</title>
+  <meta charset="utf-8" />
+  <title><%= @title || 'Без названия' %> :: Reactiongifs</title>
   <%= stylesheet_link_tag    "application", media: "all", "data-turbolinks-track" => true %>
   <%= javascript_include_tag "application", "data-turbolinks-track" => true %>
   <%= csrf_meta_tags %>
 </head>
 <body>
+<header>
+  <h1>Реакции в GIF-картинках</h1>
+</header>
 
-<%= yield %>
+<section id="content">
+  <% unless flash[:notice].nil? %>
+<div class="notice"><%= flash[:notice] %></div>
+  <% end %>
 
+  <%= yield %>
+</section>
+
+<footer>
+  <aside>version 0.0.1beta</aside>
+  <div>&#0169; 2013 reactiongifs.ru</div>
+</footer>
 </body>
 </html>
