@@ -1,7 +1,27 @@
-<%= form_for(Reaction.new) do |f| %>
-    <%= f.label :title %><br />
-    <%= f.text_field :title, required: true, size: 70 %>
-    <%= f.label :image %><br />
-    <%= f.file_field :image, required: true %>
-    <%= f.button 'Добавить реакцию', type: :submit %>
-<% end %>
+<article class="reactions-new">
+  <header>
+    <h2><%= @title %></h2>
+    <nav>
+      <ul>
+        <li><%= link_to 'Все реакции', reactions_path %></li>
+      </ul>
+    </nav>
+  </header>
+
+  <%= form_for(Reaction.new) do |f| %>
+      <fieldset>
+        <legend>Добавление реакции</legend>
+        <div>
+          <%= f.label 'Название', for: 'reaction_title' %>
+          <%= f.text_field :title, required: true, size: 70 %>
+        </div>
+        <div>
+          <%= f.label 'Картинка', for: 'reaction_image' %>
+          <%= f.file_field :image, required: true %>
+        </div>
+        <div>
+          <%= f.button 'Добавить реакцию', type: :submit %>
+        </div>
+      </fieldset>
+  <% end %>
+</article>

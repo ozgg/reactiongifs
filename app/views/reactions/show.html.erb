@@ -1,2 +1,10 @@
-<%= @reaction.title %>
-<%= image_tag @reaction.image.url, alt: @reaction.title %>
+<article class="reaction">
+  <header>
+    <h2><%= @reaction.title %></h2>
+  </header>
+  <figure>
+    <%= image_tag @reaction.image.url, alt: @reaction.title %>
+  </figure>
+  <footer><%= link_to 'На главную', root_path %></footer>
+</article>
+

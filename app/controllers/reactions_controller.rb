@@ -10,6 +10,11 @@ class ReactionsController < ApplicationController
     @reactions = Reaction.order('id desc').page(page).per(20)
   end
 
+  # get /reactions/new
+  def new
+    @title = 'Добавить реакцию'
+  end
+
   # post /reactions
   def create
     @reaction = Reaction.new(creation_parameters)
@@ -17,6 +22,11 @@ class ReactionsController < ApplicationController
       flash[:message] = 'Реакция добавлена'
       redirect_to @reaction
     end
+  end
+
+  # get /reactions/:id
+  def show
+    @title = @reaction.title
   end
 
   # patch /reactions/:id
