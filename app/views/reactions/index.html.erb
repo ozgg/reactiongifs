@@ -1,0 +1,9 @@
+<% if @reactions.empty? %>
+    <div class="notice">Реакций нет</div>
+<% else %>
+    <ul>
+      <% @reactions.each do |reaction| %>
+          <li><%= link_to reaction.title, edit_reaction_path(reaction) %></li>
+      <% end %>
+    </ul>
+<% end %>
