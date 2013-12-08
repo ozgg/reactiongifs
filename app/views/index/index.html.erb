@@ -2,10 +2,11 @@
     <ul class="reactions">
       <% @reactions.each do |reaction| %>
       <li>
-        <%= reaction.title %>
-        <%= image_tag reaction.image.url %>
+        <figure>
+          <figcaption><%= link_to reaction.title, reaction %></figcaption>
+          <%= image_tag reaction.image.url %>
+        </figure>
       </li>
-
       <% end %>
     </ul>
 <% else %>

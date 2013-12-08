@@ -8,3 +8,23 @@ article.reactions-new {
     }
   }
 }
+
+ul.reactions {
+  margin: 0;
+  padding: 0;
+
+  li {
+    list-style: none;
+    margin: 1em 0;
+    padding: 0;
+    border-bottom: dotted 1px;
+
+    figure {
+      figcaption {
+        font-weight: bold;
+        font-size: 1.2em;
+        margin: 0.5em;
+      }
+    }
+  }
+}
