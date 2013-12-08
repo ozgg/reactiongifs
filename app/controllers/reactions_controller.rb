@@ -4,7 +4,8 @@ class ReactionsController < ApplicationController
 
   # get /reactions
   def index
-    page = params[:page] || 1
+    page   = params[:page] || 1
+    @title = "Реакции, страница #{page}"
 
     @reactions = Reaction.order('id desc').page(page).per(20)
   end
