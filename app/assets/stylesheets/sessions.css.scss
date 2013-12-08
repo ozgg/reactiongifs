@@ -1,3 +1,10 @@
-// Place all the styles related to the Sessions controller here.
-// They will automatically be included in application.css.
-// You can use Sass (SCSS) here: http://sass-lang.com/
+article.login form {
+  margin: 0 0 1em 0;
+  max-width: 600px;
+  display: inline-block;
+
+  label {
+    display: inline-block;
+    min-width: 130px;
+  }
+}

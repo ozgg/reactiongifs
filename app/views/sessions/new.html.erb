@@ -1,7 +1,19 @@
-<%= form_tag do %>
-    <%= label_tag :login, 'login' %>
-    <%= text_field_tag :login, params[:login], required: true %>
-    <%= label_tag :password, 'password' %>
-    <%= password_field_tag :password, params[:password], required: true %>
-    <%= button_tag 'login', type: :submit %>
-<% end %>
+<article class="login">
+  <h2>Авторизация</h2>
+  <%= form_tag do %>
+      <fieldset>
+        <legend>Вход</legend>
+        <div>
+          <%= label_tag :login, 'Пользователь' %>
+          <%= text_field_tag :login, params[:login], required: true %>
+        </div>
+        <div>
+          <%= label_tag :password, 'Пароль' %>
+          <%= password_field_tag :password, params[:password], required: true %>
+        </div>
+        <div>
+          <%= button_tag 'Войти', type: :submit %>
+        </div>
+      </fieldset>
+  <% end %>
+</article>
