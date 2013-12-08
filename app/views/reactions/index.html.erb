@@ -1,3 +1,11 @@
+<header>
+  <h2><%= @title %></h2>
+  <nav>
+    <ul>
+      <li><%= link_to 'Добавить реакцию', new_reaction_path %></li>
+    </ul>
+  </nav>
+</header>
 <% if @reactions.empty? %>
     <div class="notice">Реакций нет</div>
 <% else %>
@@ -6,4 +14,8 @@
           <li><%= link_to reaction.title, edit_reaction_path(reaction) %></li>
       <% end %>
     </ul>
+    <footer>
+      <%= paginate @reactions %>
+    </footer>
 <% end %>
+

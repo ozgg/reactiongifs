@@ -9,7 +9,7 @@ describe "index/index.html.erb" do
             title: 'Something happens',
             image: Rack::Test::UploadedFile.new('spec/support/images/magic.gif', 'image/gif')
         )
-      assign(:reactions, Reaction.all)
+      assign(:reactions, Reaction.page(1).per(5))
       render
       expect(rendered).to have_selector('ul', class: 'reactions') do |ul|
         expect(ul).to have_selector('li') do |li|
@@ -22,7 +22,7 @@ describe "index/index.html.erb" do
 
   context "when no reactions found" do
     it "shows message 'Реакций нет'" do
-      assign(:reactions, Reaction.all)
+      assign(:reactions, Reaction.page(1).per(5))
       render
       expect(rendered).to contain('Реакций нет')
     end
