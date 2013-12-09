@@ -23,6 +23,9 @@
 <footer>
   <aside>version 0.1.0beta</aside>
   <div>&#0169; 2013 reactiongifs.ru</div>
+  <% if Rails.env.production? %>
+  <%= render 'index/metrics' %>
+  <% end %>
 </footer>
 </body>
 </html>
