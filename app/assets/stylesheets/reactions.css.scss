@@ -25,6 +25,15 @@ ul.reactions {
   }
 }
 
+.reaction {
+  margin: 1em 0 0 0;
+  padding: 0 0 1em 2em;
+
+  footer {
+    margin: 1em 0 0 0;
+  }
+}
+
 .reactions figure, .reaction figure {
   margin: 0;
   padding: 0;

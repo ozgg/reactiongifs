@@ -5,6 +5,8 @@
   <figure>
     <%= image_tag @reaction.image.url, alt: @reaction.title %>
   </figure>
-  <footer><%= link_to 'На главную', root_path %></footer>
+  <time datetime="<%= @reaction.created_at %>"><%= @reaction.created_at.strftime('%d.%m.%Y, %H:%M') %></time>
+  <footer>
+    <p><%= link_to 'На главную', root_path %></p>
+  </footer>
 </article>
-
