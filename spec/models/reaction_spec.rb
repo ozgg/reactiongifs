@@ -4,9 +4,9 @@ describe Reaction do
   let(:user) { User.create! login: 'some_guy', password: '123', password_confirmation: '123' }
   let(:reaction) do
     Reaction.new(
-        user: user,
-        title: 'Something happens',
-        image: Rack::Test::UploadedFile.new('spec/support/images/magic.gif', 'image/gif')
+      user: user,
+      title: 'Something happens',
+      image: Rack::Test::UploadedFile.new('spec/support/images/magic.gif', 'image/gif')
     )
   end
 

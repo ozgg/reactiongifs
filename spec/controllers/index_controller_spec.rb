@@ -14,16 +14,16 @@ describe IndexController do
     let(:user) { User.create! login: 'some_guy', password: '123', password_confirmation: '123' }
     let!(:reactions) do
       [
-          Reaction.create!(
+        Reaction.create!(
           user:  user,
           title: 'Something happens',
           image: Rack::Test::UploadedFile.new('spec/support/images/magic.gif', 'image/gif')
-          ),
-          Reaction.create!(
+        ),
+        Reaction.create!(
           user:  user,
           title: 'Something else happens',
           image: Rack::Test::UploadedFile.new('spec/support/images/magic2.gif', 'image/gif')
-          ),
+        ),
       ]
     end
 

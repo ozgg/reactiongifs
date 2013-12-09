@@ -5,8 +5,8 @@ describe 'sessions/new.html.erb' do
     render
 
     form_parameters = {
-        method: 'post',
-        action: login_path
+      method: 'post',
+      action: login_path
     }
     expect(rendered).to have_selector('form', form_parameters) do |form|
       expect(form).to have_selector('input', name: 'login', type: 'text')

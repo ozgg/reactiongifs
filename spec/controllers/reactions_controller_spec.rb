@@ -4,9 +4,9 @@ describe ReactionsController do
   let(:user) { User.create!(login: 'some_guy', password: '123', password_confirmation: '123') }
   let(:reaction_parameters) do
     {
-        user:  user,
-        title: 'Something happens',
-        image: Rack::Test::UploadedFile.new('spec/support/images/magic.gif'),
+      user:  user,
+      title: 'Something happens',
+      image: Rack::Test::UploadedFile.new('spec/support/images/magic.gif'),
     }
   end
   let!(:reaction) { Reaction.create!(reaction_parameters) }
@@ -35,7 +35,7 @@ describe ReactionsController do
 
     describe "post create" do
       it "creates new reaction" do
-        expect{post :create, reaction: reaction_parameters}.to change(Reaction, :count).by(1)
+        expect { post :create, reaction: reaction_parameters }.to change(Reaction, :count).by(1)
       end
 
       it "redirects to reaction page" do
@@ -70,12 +70,12 @@ describe ReactionsController do
 
       it "ignores new reaction image" do
         parameters = {
-            id: reaction,
-            reaction: {
-                image: Rack::Test::UploadedFile.new('spec/support/images/magic2.gif')
-            }
+          id:       reaction,
+          reaction: {
+            image: Rack::Test::UploadedFile.new('spec/support/images/magic2.gif')
+          }
         }
-        expect{patch :update, parameters}.not_to change(reaction, :image)
+        expect { patch :update, parameters }.not_to change(reaction, :image)
       end
 
       it "redirects to reaction page" do
@@ -92,7 +92,7 @@ describe ReactionsController do
     describe "delete destroy" do
       it "removes reaction from database" do
         delete :destroy, id: reaction
-        expect{reaction.reload}.to raise_error(ActiveRecord::RecordNotFound)
+        expect { reaction.reload }.to raise_error(ActiveRecord::RecordNotFound)
       end
 
       it "redirects to root page" do
