@@ -6,6 +6,7 @@
           <figcaption><%= link_to reaction.title, reaction %></figcaption>
           <%= image_tag reaction.image.url %>
         </figure>
+        <time datetime="<%= reaction.created_at %>"><%= reaction.created_at.strftime('%d.%m.%Y, %H:%M') %></time>
       </li>
       <% end %>
     </ul>
