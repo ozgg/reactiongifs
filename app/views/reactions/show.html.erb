@@ -8,5 +8,6 @@
   <time datetime="<%= @reaction.created_at %>"><%= @reaction.created_at.strftime('%d.%m.%Y, %H:%M') %></time>
   <footer>
     <p><%= link_to 'На главную', root_path %></p>
+    <%= render 'addthis' %>
   </footer>
 </article>
