@@ -64,3 +64,10 @@ nav.pagination {
     background: #F7F7F7;
   }
 }
+
+.copy-to-clipboard {
+  display: inline-block;
+  width: 32px;
+  height: 32px;
+  background: image-url('clipboard.png') center no-repeat;
+}

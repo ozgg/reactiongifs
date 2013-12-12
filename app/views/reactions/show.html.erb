@@ -5,6 +5,7 @@
   <figure>
     <%= image_tag @reaction.image.url, alt: @reaction.title %>
   </figure>
+  <span class="copy-to-clipboard" data-text="<%= url_to_image @reaction.image.url %>" title="<%= t 'index.index.copy_link_to_clipboard' %>"></span>
   <time datetime="<%= @reaction.created_at %>"><%= @reaction.created_at.strftime('%d.%m.%Y, %H:%M') %></time>
   <footer>
     <p><%= link_to 'На главную', root_path %></p>
