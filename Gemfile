@@ -44,6 +44,7 @@ gem 'mina', group: :development
 group :development, :test do
   gem 'rspec-rails', '~> 2.0'
   gem 'webrat', '~> 0.7.2'
+  gem 'factory_girl_rails', '~> 4.0'
 end
 
 gem 'carrierwave'

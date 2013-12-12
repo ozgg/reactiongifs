@@ -2,12 +2,10 @@ require 'spec_helper'
 
 describe SessionsController do
 
-  let(:user) { User.create! login: 'random_guy', password: 'secret', password_confirmation: 'secret' }
+  let(:user) { FactoryGirl.create(:user) }
 
   context 'when user is not logged in' do
-    before :each do
-      session[:user_id] = nil
-    end
+    before(:each) { session[:user_id] = nil }
 
     describe 'get new' do
       it 'renders view with form' do
@@ -30,9 +28,7 @@ describe SessionsController do
   end
 
   context 'Successful login' do
-    before :each do
-      post :create, login: user.login, password: 'secret'
-    end
+    before(:each) { post :create, login: user.login, password: 'secret' }
 
     it 'creates session with user id' do
       expect(session[:user_id]).to eq(user.id)
@@ -48,9 +44,7 @@ describe SessionsController do
   end
 
   context 'Unsuccessful login' do
-    before :each do
-      post :create, login: user.login, password: 'incorrect'
-    end
+    before(:each) { post :create, login: user.login, password: 'incorrect' }
 
     it 'redirects to login page' do
       expect(response).to redirect_to(login_path)
@@ -62,9 +56,7 @@ describe SessionsController do
   end
 
   context 'when user is logged in' do
-    before :each do
-      session[:user_id] = user.id
-    end
+    before(:each) { session[:user_id] = user.id }
 
     describe 'get new' do
       before :each do
@@ -81,9 +73,7 @@ describe SessionsController do
     end
 
     describe 'post create' do
-      before :each do
-        post :create
-      end
+      before(:each) { post :create }
 
       it 'redirects to root page' do
         expect(response).to redirect_to(root_path)
@@ -95,9 +85,7 @@ describe SessionsController do
     end
 
     describe 'delete destroy' do
-      before :each do
-        delete :destroy
-      end
+      before(:each) { delete :destroy }
 
       it 'deletes user id from session' do
         expect(session[:user_id]).to be_nil
