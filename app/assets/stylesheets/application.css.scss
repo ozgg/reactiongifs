@@ -70,4 +70,9 @@ nav.pagination {
   width: 32px;
   height: 32px;
   background: image-url('clipboard.png') center no-repeat;
+  cursor: pointer;
+}
+
+span.done {
+  background-image: image-url('clipboard-done.png');
 }

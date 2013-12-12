@@ -27,6 +27,9 @@ $(document).ready(function() {
         path: '/swf/jquery.clipboard.swf',
         copy: function() {
             return $(this).data('text');
+        },
+        afterCopy: function() {
+            $(this).addClass('done')
         }
     });
 });
