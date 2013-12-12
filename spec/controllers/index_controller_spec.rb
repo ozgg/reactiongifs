@@ -11,26 +11,12 @@ describe IndexController do
   end
 
   context "when reactions found" do
-    let(:user) { User.create! login: 'some_guy', password: '123', password_confirmation: '123' }
-    let!(:reactions) do
-      [
-        Reaction.create!(
-          user:  user,
-          title: 'Something happens',
-          image: Rack::Test::UploadedFile.new('spec/support/images/magic.gif', 'image/gif')
-        ),
-        Reaction.create!(
-          user:  user,
-          title: 'Something else happens',
-          image: Rack::Test::UploadedFile.new('spec/support/images/magic2.gif', 'image/gif')
-        ),
-      ]
-    end
-
     describe "get index" do
       it "assigns @reactions" do
+        reaction = FactoryGirl.create(:reaction)
+
         get :index
-        expect(assigns[:reactions]).to include(reactions.first, reactions.last)
+        expect(assigns[:reactions]).to include(reaction)
       end
     end
   end
