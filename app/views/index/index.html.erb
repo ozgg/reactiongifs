@@ -6,6 +6,9 @@
           <figcaption><%= link_to reaction.title, reaction %></figcaption>
           <%= image_tag reaction.image.url %>
         </figure>
+        <div class="copy-to-clipboard" data-text="<%= reaction_url reaction %>">
+          <%= t '.copy_link_to_clipboard' %>
+        </div>
         <time datetime="<%= reaction.created_at %>"><%= reaction.created_at.strftime('%d.%m.%Y, %H:%M') %></time>
       </li>
       <% end %>

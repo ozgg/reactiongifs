@@ -10,7 +10,23 @@
 // Read Sprockets README (https://github.com/sstephenson/sprockets#sprockets-directives) for details
 // about supported directives.
 //
-//= require jquery
+//= require jquery-2.0.3.min
 //= require jquery_ujs
 //= require jquery.turbolinks
+//= require jquery.clipboard
 //= require_tree .
+
+$(document).ready(function() {
+    var copy_sel = $('.copy-to-clipboard');
+
+    copy_sel.on('click', function(e) {
+        e.preventDefault();
+    });
+
+    copy_sel.clipboard({
+        path: '/swf/jquery.clipboard.swf',
+        copy: function() {
+            return $(this).data('text');
+        }
+    });
+});

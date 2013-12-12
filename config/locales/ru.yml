@@ -27,3 +27,6 @@ ru:
       previous: "Назад"
       next: "Вперёд"
       truncate: "..."
+  index:
+    index:
+      copy_link_to_clipboard: "Скопировать ссылку в буфер обмена"
