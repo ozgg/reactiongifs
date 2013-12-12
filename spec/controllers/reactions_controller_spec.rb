@@ -1,15 +1,9 @@
 require 'spec_helper'
 
 describe ReactionsController do
-  let(:user) { User.create!(login: 'some_guy', password: '123', password_confirmation: '123') }
-  let(:reaction_parameters) do
-    {
-      user:  user,
-      title: 'Something happens',
-      image: Rack::Test::UploadedFile.new('spec/support/images/magic.gif'),
-    }
-  end
-  let!(:reaction) { Reaction.create!(reaction_parameters) }
+  let(:user) { FactoryGirl.create(:user) }
+  let(:reaction_parameters) { FactoryGirl.attributes_for(:reaction, user: user) }
+  let!(:reaction) { FactoryGirl.create(:reaction, user: user) }
 
   context "User is logged in" do
     before(:each) { session[:user_id] = user.id }
