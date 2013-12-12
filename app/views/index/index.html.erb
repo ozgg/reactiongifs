@@ -1,16 +1,16 @@
 <% if @reactions.any? %>
     <ul class="reactions">
       <% @reactions.each do |reaction| %>
-      <li>
-        <figure>
-          <figcaption><%= link_to reaction.title, reaction %></figcaption>
-          <%= image_tag reaction.image.url %>
-        </figure>
-        <div class="copy-to-clipboard" data-text="<%= reaction_url reaction %>">
-          <%= t '.copy_link_to_clipboard' %>
-        </div>
-        <time datetime="<%= reaction.created_at %>"><%= reaction.created_at.strftime('%d.%m.%Y, %H:%M') %></time>
-      </li>
+          <li>
+            <figure>
+              <figcaption>
+                <span class="copy-to-clipboard" data-text="<%= reaction_url reaction %>" title="<%= t '.copy_link_to_clipboard' %>"></span>
+                <%= link_to reaction.title, reaction %>
+              </figcaption>
+              <%= image_tag reaction.image.url %>
+            </figure>
+            <time datetime="<%= reaction.created_at %>"><%= reaction.created_at.strftime('%d.%m.%Y, %H:%M') %></time>
+          </li>
       <% end %>
     </ul>
     <%= paginate @reactions %>
