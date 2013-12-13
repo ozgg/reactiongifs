@@ -47,7 +47,12 @@ class ReactionsController < ApplicationController
 
 protected
   def creation_parameters
-    params.require(:reaction).permit(:title, :image).merge(user: current_user)
+    user     = current_user
+    to_merge = {
+        user: user,
+        approved: user.trusted?
+    }
+    params.require(:reaction).permit(:title, :image).merge(to_merge)
   end
 
   def update_parameters

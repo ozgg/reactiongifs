@@ -5,8 +5,10 @@ describe ReactionsController do
   let(:reaction_parameters) { FactoryGirl.attributes_for(:reaction, user: user) }
   let!(:reaction) { FactoryGirl.create(:reaction, user: user) }
 
-  context "User is logged in" do
-    before(:each) { session[:user_id] = user.id }
+  context "Active user is logged in" do
+    let(:active_user) { FactoryGirl.create(:active_user) }
+
+    before(:each) { session[:user_id] = active_user.id }
 
     describe "get index" do
       before(:each) { get :index }
@@ -40,6 +42,11 @@ describe ReactionsController do
       it "adds flash message 'Реакция добавлена'" do
         post :create, reaction: reaction_parameters
         expect(flash[:message]).to eq('Реакция добавлена')
+      end
+
+      it "adds unapproved reaction" do
+        post :create, reaction: reaction_parameters
+        expect(Reaction.last).not_to be_approved
       end
     end
 
@@ -97,6 +104,19 @@ describe ReactionsController do
       it "adds flash message 'Реакция удалена'" do
         delete :destroy, id: reaction
         expect(flash[:notice]).to eq('Реакция удалена')
+      end
+    end
+  end
+
+  describe "Trusted user is logged in" do
+    let(:trusted_user) { FactoryGirl.create(:trusted_user) }
+
+    before(:each) { session[:user_id] = trusted_user.id }
+
+    describe "post create" do
+      it "adds approved reaction" do
+        post :create, reaction: reaction_parameters
+        expect(Reaction.last).to be_approved
       end
     end
   end
