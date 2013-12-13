@@ -29,7 +29,35 @@ describe ReactionsController do
     end
   end
 
+  shared_examples "restricted editing" do
+    describe "get index" do
+      before(:each) { get :index }
+
+      it_should_behave_like "restricted area"
+    end
+
+    describe "get edit" do
+      before(:each) { get :edit, id: reaction.id }
+
+      it_should_behave_like "restricted area"
+    end
+
+    describe "patch update" do
+      before(:each) { patch :update, id: reaction.id }
+
+      it_should_behave_like "restricted area"
+    end
+
+    describe "delete destroy" do
+      before(:each) { delete :destroy, id: reaction }
+
+      it_should_behave_like "restricted area"
+    end
+  end
+
   shared_examples "restricted management" do
+    it_should_behave_like "restricted editing"
+
     describe "get new" do
       before(:each) { get :new }
 
@@ -41,28 +69,27 @@ describe ReactionsController do
 
       it_should_behave_like "restricted area"
     end
+  end
 
-    describe "patch update" do
-      before(:each) { patch :update, id: reaction.id }
+  context "User is not logged in" do
+    before(:each) { session[:user_id] = nil }
 
-      it_should_behave_like "restricted area"
-    end
+    it_should_behave_like "restricted management"
+    it_should_behave_like "viewable reaction page"
+  end
 
-    describe "get edit" do
-      before(:each) { get :edit, id: reaction.id }
+  context "Banned user is logged in" do
+    before(:each) { session[:user_id] = FactoryGirl.create(:banned_user).id }
 
-      it_should_behave_like "restricted area"
-    end
-
-    describe "get index" do
-      before(:each) { get :index }
-
-      it_should_behave_like "restricted area"
-    end
+    it_should_behave_like "restricted management"
+    it_should_behave_like "viewable reaction page"
   end
 
   context "Active user is logged in" do
     before(:each) { session[:user_id] = user.id }
+
+    it_should_behave_like "restricted editing"
+    it_should_behave_like "viewable reaction page"
 
     describe "get new" do
       it "renders reactions/new view" do
@@ -91,38 +118,13 @@ describe ReactionsController do
         expect(Reaction.last).not_to be_approved
       end
     end
-
-    describe "get index" do
-      before(:each) { get :index }
-
-      it_should_behave_like "restricted area"
-    end
-
-    describe "get edit" do
-      before(:each) { get :edit, id: reaction }
-
-      it_should_behave_like "restricted area"
-    end
-
-    describe "path update" do
-      before(:each) { patch :update, id: reaction, title: 'new title' }
-
-      it_should_behave_like "restricted area"
-    end
-
-    describe "delete destroy" do
-      before(:each) { delete :destroy, id: reaction }
-
-      it_should_behave_like "restricted area"
-    end
-
-    it_should_behave_like "viewable reaction page"
   end
 
   context "Trusted user is logged in" do
-    let(:trusted_user) { FactoryGirl.create(:trusted_user) }
+    before(:each) { session[:user_id] = FactoryGirl.create(:trusted_user).id }
 
-    before(:each) { session[:user_id] = trusted_user.id }
+    it_should_behave_like "restricted editing"
+    it_should_behave_like "viewable reaction page"
 
     describe "post create" do
       it "adds approved reaction" do
@@ -130,14 +132,12 @@ describe ReactionsController do
         expect(Reaction.last).to be_approved
       end
     end
-
-    it_should_behave_like "viewable reaction page"
   end
 
   context "Moderator is logged in" do
-    let(:moderator) { FactoryGirl.create(:moderator) }
+    before(:each) { session[:user_id] = FactoryGirl.create(:moderator).id }
 
-    before(:each) { session[:user_id] = moderator.id }
+    it_should_behave_like "viewable reaction page"
 
     describe "get index" do
       before(:each) { get :index }
@@ -172,10 +172,10 @@ describe ReactionsController do
 
       it "ignores new reaction image" do
         parameters = {
-            id:       reaction,
-            reaction: {
-                image: Rack::Test::UploadedFile.new('spec/support/images/magic2.gif')
-            }
+        id:       reaction,
+        reaction: {
+        image: Rack::Test::UploadedFile.new('spec/support/images/magic2.gif')
+        }
         }
         expect { patch :update, parameters }.not_to change(reaction, :image)
       end
@@ -207,21 +207,5 @@ describe ReactionsController do
         expect(flash[:notice]).to eq('Реакция удалена')
       end
     end
-
-    it_should_behave_like "viewable reaction page"
-  end
-
-  context "User is not logged in" do
-    before(:each) { session[:user_id] = nil }
-
-    it_should_behave_like "restricted management"
-    it_should_behave_like "viewable reaction page"
-  end
-
-  context "Banned user is logged in" do
-    before(:each) { session[:user_id] = FactoryGirl.create(:banned_user).id }
-
-    it_should_behave_like "restricted management"
-    it_should_behave_like "viewable reaction page"
   end
 end
