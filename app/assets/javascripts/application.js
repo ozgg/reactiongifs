@@ -20,13 +20,16 @@ $(document).ready(function() {
     var copy_sel = $('.copy-to-clipboard');
 
     copy_sel.on('click', function(e) {
-        e.preventDefault();
+        e.preventDefault()
     });
 
     copy_sel.clipboard({
         path: '/swf/jquery.clipboard.swf',
         copy: function() {
-            return $(this).data('text');
+            return $(this).data('text')
+        },
+        beforeCopy: function() {
+            copy_sel.removeClass('done')
         },
         afterCopy: function() {
             $(this).addClass('done')
