@@ -11,6 +11,7 @@ describe "reactions/edit.html.erb" do
   it "displays form with title for reaction" do
     expect(rendered).to have_selector('form', action: reaction_path(reaction)) do |form|
       expect(form).to have_selector('input', type: 'text', name: 'reaction[title]')
+      expect(form).to have_selector('input', type: 'checkbox', name: 'reaction[approved]')
       expect(form).to have_selector('input', type: 'submit')
     end
   end

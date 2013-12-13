@@ -2,8 +2,9 @@ require 'spec_helper'
 
 describe ReactionsController do
   let(:user) { FactoryGirl.create(:user) }
-  let(:reaction_parameters) { FactoryGirl.attributes_for(:reaction, user: user) }
-  let!(:reaction) { FactoryGirl.create(:reaction, user: user) }
+  let(:reaction_parameters) { FactoryGirl.attributes_for(:reaction) }
+  let(:reaction) { FactoryGirl.create(:reaction, user: user) }
+  let!(:approved_reaction) { FactoryGirl.create(:approved_reaction, user: user) }
 
   shared_examples "restricted area" do
     it "redirects to login page" do
@@ -15,17 +16,22 @@ describe ReactionsController do
     end
   end
 
-  shared_examples "viewable reaction page" do
+  shared_examples "restricted any unapproved reaction page" do
     describe "get show" do
-      before(:each) { get :show, id: reaction.id }
+      before(:each) { get :show, id: reaction }
 
-      it "renders view with reaction" do
-        expect(response).to render_template('reactions/show')
-      end
+      it_should_behave_like "restricted area"
+    end
+  end
 
-      it "assigns @reaction" do
-        expect(assigns[:reaction]).to eq(reaction)
-      end
+  shared_examples "restricted others unapproved reaction page" do
+    let(:other_guy) { FactoryGirl.create(:user, login: 'another_guy') }
+    let(:other_reaction) { FactoryGirl.create(:reaction, user: other_guy) }
+
+    describe "get show" do
+      before(:each) { get :show, id: other_reaction }
+
+      it_should_behave_like "restricted area"
     end
   end
 
@@ -71,25 +77,46 @@ describe ReactionsController do
     end
   end
 
+  shared_examples "reaction view renderer" do
+    it "renders view with reaction" do
+      expect(response).to render_template('reactions/show')
+    end
+  end
+
+  shared_examples "viewable approved reaction page" do
+    describe "get show" do
+      before(:each) { get :show, id: approved_reaction.id }
+
+      it_should_behave_like "reaction view renderer"
+
+      it "assigns @reaction" do
+        expect(assigns[:reaction]).to eq(approved_reaction)
+      end
+    end
+  end
+
   context "User is not logged in" do
     before(:each) { session[:user_id] = nil }
 
     it_should_behave_like "restricted management"
-    it_should_behave_like "viewable reaction page"
+    it_should_behave_like "viewable approved reaction page"
+    it_should_behave_like "restricted any unapproved reaction page"
   end
 
   context "Banned user is logged in" do
     before(:each) { session[:user_id] = FactoryGirl.create(:banned_user).id }
 
     it_should_behave_like "restricted management"
-    it_should_behave_like "viewable reaction page"
+    it_should_behave_like "viewable approved reaction page"
+    it_should_behave_like "restricted any unapproved reaction page"
   end
 
   context "Active user is logged in" do
     before(:each) { session[:user_id] = user.id }
 
     it_should_behave_like "restricted editing"
-    it_should_behave_like "viewable reaction page"
+    it_should_behave_like "viewable approved reaction page"
+    it_should_behave_like "restricted others unapproved reaction page"
 
     describe "get new" do
       it "renders reactions/new view" do
@@ -118,13 +145,27 @@ describe ReactionsController do
         expect(Reaction.last).not_to be_approved
       end
     end
+
+    describe "get show for own unapproved reaction" do
+      let(:another_reaction) { FactoryGirl.create(:reaction, user: user) }
+
+      before(:each) { get :show, id: another_reaction }
+
+      it_should_behave_like "reaction view renderer"
+
+      it "assigns @reaction" do
+        expect(assigns[:reaction]).to eq(another_reaction)
+      end
+    end
   end
 
   context "Trusted user is logged in" do
-    before(:each) { session[:user_id] = FactoryGirl.create(:trusted_user).id }
+    let(:trusted_user) { FactoryGirl.create(:trusted_user) }
+    before(:each) { session[:user_id] = trusted_user.id }
 
     it_should_behave_like "restricted editing"
-    it_should_behave_like "viewable reaction page"
+    it_should_behave_like "viewable approved reaction page"
+    it_should_behave_like "restricted others unapproved reaction page"
 
     describe "post create" do
       it "adds approved reaction" do
@@ -132,12 +173,26 @@ describe ReactionsController do
         expect(Reaction.last).to be_approved
       end
     end
+
+    describe "get show for own unapproved reaction" do
+      let(:another_reaction) { FactoryGirl.create(:reaction, user: trusted_user) }
+
+      before(:each) { get :show, id: another_reaction }
+
+      it_should_behave_like "reaction view renderer"
+
+      it "assigns @reaction" do
+        expect(assigns[:reaction]).to eq(another_reaction)
+      end
+    end
   end
 
   context "Moderator is logged in" do
-    before(:each) { session[:user_id] = FactoryGirl.create(:moderator).id }
+    let(:moderator) { FactoryGirl.create(:moderator) }
 
-    it_should_behave_like "viewable reaction page"
+    before(:each) { session[:user_id] = moderator.id }
+
+    it_should_behave_like "viewable approved reaction page"
 
     describe "get index" do
       before(:each) { get :index }
@@ -170,12 +225,24 @@ describe ReactionsController do
         expect(reaction.title).to eq('new title')
       end
 
+      it "sets approval flag" do
+        patch :update, id: reaction, reaction: { approved: true }
+        reaction.reload
+        expect(reaction.approved?).to be_true
+      end
+
+      it "unsets approval flag" do
+        patch :update, id: approved_reaction, reaction: { approved: false }
+        approved_reaction.reload
+        expect(approved_reaction.approved?).to be_false
+      end
+
       it "ignores new reaction image" do
         parameters = {
-        id:       reaction,
-        reaction: {
-        image: Rack::Test::UploadedFile.new('spec/support/images/magic2.gif')
-        }
+          id:       reaction,
+          reaction: {
+            image: Rack::Test::UploadedFile.new('spec/support/images/magic2.gif')
+          }
         }
         expect { patch :update, parameters }.not_to change(reaction, :image)
       end
@@ -205,6 +272,28 @@ describe ReactionsController do
       it "adds flash message 'Реакция удалена'" do
         delete :destroy, id: reaction
         expect(flash[:notice]).to eq('Реакция удалена')
+      end
+    end
+
+    describe "get show for own unapproved reaction" do
+      let(:another_reaction) { FactoryGirl.create(:reaction, user: moderator) }
+
+      before(:each) { get :show, id: another_reaction }
+
+      it_should_behave_like "reaction view renderer"
+
+      it "assigns @reaction" do
+        expect(assigns[:reaction]).to eq(another_reaction)
+      end
+    end
+
+    describe "get show for unapproved reaction" do
+      before(:each) { get :show, id: reaction }
+
+      it_should_behave_like "reaction view renderer"
+
+      it "assigns @reaction" do
+        expect(assigns[:reaction]).to eq(reaction)
       end
     end
   end

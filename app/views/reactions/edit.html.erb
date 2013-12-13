@@ -1,6 +1,7 @@
 <%= form_for(@reaction) do |f| %>
     <%= f.label :title %><br />
     <%= f.text_field :title, required: true, size: 70 %>
+    <%= f.check_box :approved %>
     <%= f.submit %>
 <% end %>
 

@@ -27,6 +27,7 @@ class ReactionsController < ApplicationController
 
   # get /reactions/:id
   def show
+    redirect_with_notice unless @reaction.approved || my_reaction? || moderator?
     @title = @reaction.title
   end
 
@@ -57,7 +58,7 @@ protected
   end
 
   def update_parameters
-    params.require(:reaction).permit(:title)
+    params.require(:reaction).permit(:title, :approved)
   end
 
   def set_reaction
@@ -69,11 +70,15 @@ protected
   end
 
   def allow_only_moderators
-    redirect_with_notice unless current_user.moderator?
+    redirect_with_notice unless moderator?
   end
 
   def redirect_with_notice
     flash[:notice] = t('authorization.insufficient_rights')
     redirect_to login_path
+  end
+
+  def my_reaction?
+    @reaction.user_id == session[:user_id]
   end
 end

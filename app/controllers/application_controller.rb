@@ -9,4 +9,9 @@ protected
       User.find session[:user_id]
     end
   end
+
+  def moderator?
+    user = current_user
+    !user.nil? && user.moderator?
+  end
 end
