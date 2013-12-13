@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131213184601) do
+ActiveRecord::Schema.define(version: 20131213190704) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -33,6 +33,9 @@ ActiveRecord::Schema.define(version: 20131213184601) do
     t.string   "password_digest"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "can_post",        default: true
+    t.boolean  "trusted",         default: false
+    t.boolean  "moderator",       default: false
   end
 
 end
