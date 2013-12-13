@@ -12,11 +12,18 @@ describe IndexController do
 
   context "when reactions found" do
     describe "get index" do
-      it "assigns @reactions" do
-        reaction = FactoryGirl.create(:reaction)
+      it "assigns @reactions with approved reactions" do
+        reaction = FactoryGirl.create(:approved_reaction)
 
         get :index
         expect(assigns[:reactions]).to include(reaction)
+      end
+
+      it "assigns @reactions without unapproved reactions" do
+        reaction = FactoryGirl.create(:reaction)
+
+        get :index
+        expect(assigns[:reactions]).not_to include(reaction)
       end
     end
   end
