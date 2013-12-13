@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20131129211141) do
+ActiveRecord::Schema.define(version: 20131213184601) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -22,8 +22,10 @@ ActiveRecord::Schema.define(version: 20131129211141) do
     t.string   "image"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "approved",   default: false
   end
 
+  add_index "reactions", ["approved", "id"], name: "index_reactions_on_approved_and_id", using: :btree
   add_index "reactions", ["user_id"], name: "index_reactions_on_user_id", using: :btree
 
   create_table "users", force: true do |t|
