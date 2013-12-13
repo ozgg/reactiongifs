@@ -29,6 +29,38 @@ describe ReactionsController do
     end
   end
 
+  shared_examples "restricted management" do
+    describe "get new" do
+      before(:each) { get :new }
+
+      it_should_behave_like "restricted area"
+    end
+
+    describe "post create" do
+      before(:each) { post :create }
+
+      it_should_behave_like "restricted area"
+    end
+
+    describe "patch update" do
+      before(:each) { patch :update, id: reaction.id }
+
+      it_should_behave_like "restricted area"
+    end
+
+    describe "get edit" do
+      before(:each) { get :edit, id: reaction.id }
+
+      it_should_behave_like "restricted area"
+    end
+
+    describe "get index" do
+      before(:each) { get :index }
+
+      it_should_behave_like "restricted area"
+    end
+  end
+
   context "Active user is logged in" do
     before(:each) { session[:user_id] = user.id }
 
@@ -182,74 +214,14 @@ describe ReactionsController do
   context "User is not logged in" do
     before(:each) { session[:user_id] = nil }
 
-    describe "get new" do
-      before(:each) { get :new }
-
-      it_should_behave_like "restricted area"
-    end
-
-    describe "post create" do
-      before(:each) { post :create }
-
-      it_should_behave_like "restricted area"
-    end
-
-    describe "patch update" do
-      before(:each) { patch :update, id: reaction.id }
-
-      it_should_behave_like "restricted area"
-    end
-
-    describe "get edit" do
-      before(:each) { get :edit, id: reaction.id }
-
-      it_should_behave_like "restricted area"
-    end
-
-    describe "get index" do
-      before(:each) { get :index }
-
-      it_should_behave_like "restricted area"
-    end
-
+    it_should_behave_like "restricted management"
     it_should_behave_like "viewable reaction page"
   end
 
   context "Banned user is logged in" do
-    let(:banned_user) { FactoryGirl.create(:banned_user) }
+    before(:each) { session[:user_id] = FactoryGirl.create(:banned_user).id }
 
-    before(:each) { session[:user_id] = banned_user.id }
-
-    describe "get new" do
-      before(:each) { get :new }
-
-      it_should_behave_like "restricted area"
-    end
-
-    describe "post create" do
-      before(:each) { post :create }
-
-      it_should_behave_like "restricted area"
-    end
-
-    describe "patch update" do
-      before(:each) { patch :update, id: reaction.id }
-
-      it_should_behave_like "restricted area"
-    end
-
-    describe "get edit" do
-      before(:each) { get :edit, id: reaction.id }
-
-      it_should_behave_like "restricted area"
-    end
-
-    describe "get index" do
-      before(:each) { get :index }
-
-      it_should_behave_like "restricted area"
-    end
-
+    it_should_behave_like "restricted management"
     it_should_behave_like "viewable reaction page"
   end
 end
