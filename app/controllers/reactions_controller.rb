@@ -1,5 +1,6 @@
 class ReactionsController < ApplicationController
   before_action :restrict_access, except: [:show]
+  before_action :allow_only_moderators, except: [:show, :new, :create]
   before_action :set_reaction, only: [:show, :update, :edit, :destroy]
 
   # get /reactions
@@ -64,9 +65,15 @@ protected
   end
 
   def restrict_access
-    if current_user.nil?
-      flash[:notice] = 'Необходима авторизация'
-      redirect_to login_path
-    end
+    redirect_with_notice if current_user.nil? || !current_user.can_post?
+  end
+
+  def allow_only_moderators
+    redirect_with_notice unless current_user.moderator?
+  end
+
+  def redirect_with_notice
+    flash[:notice] = t('authorization.insufficient_rights')
+    redirect_to login_path
   end
 end

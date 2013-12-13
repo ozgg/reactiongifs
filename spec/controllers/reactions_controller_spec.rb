@@ -5,22 +5,18 @@ describe ReactionsController do
   let(:reaction_parameters) { FactoryGirl.attributes_for(:reaction, user: user) }
   let!(:reaction) { FactoryGirl.create(:reaction, user: user) }
 
-  context "Active user is logged in" do
-    let(:active_user) { FactoryGirl.create(:active_user) }
-
-    before(:each) { session[:user_id] = active_user.id }
-
-    describe "get index" do
-      before(:each) { get :index }
-
-      it "renders reactions/index view" do
-        expect(response).to render_template('reactions/index')
-      end
-
-      it "assigns @reactions" do
-        expect(assigns[:reactions]).to include(reaction)
-      end
+  shared_examples "restricted area" do
+    it "redirects to login page" do
+      expect(response).to redirect_to(login_path)
     end
+
+    it "adds flash message 'Недостаточно прав'" do
+      expect(flash[:notice]).to eq(I18n.t('authorization.insufficient_rights'))
+    end
+  end
+
+  context "Active user is logged in" do
+    before(:each) { session[:user_id] = user.id }
 
     describe "get new" do
       it "renders reactions/new view" do
@@ -50,6 +46,61 @@ describe ReactionsController do
       end
     end
 
+    describe "get index" do
+      before(:each) { get :index }
+
+      it_should_behave_like "restricted area"
+    end
+
+    describe "get edit" do
+      before(:each) { get :edit, id: reaction }
+
+      it_should_behave_like "restricted area"
+    end
+
+    describe "path update" do
+      before(:each) { patch :update, id: reaction, title: 'new title' }
+
+      it_should_behave_like "restricted area"
+    end
+
+    describe "delete destroy" do
+      before(:each) { delete :destroy, id: reaction }
+
+      it_should_behave_like "restricted area"
+    end
+  end
+
+  context "Trusted user is logged in" do
+    let(:trusted_user) { FactoryGirl.create(:trusted_user) }
+
+    before(:each) { session[:user_id] = trusted_user.id }
+
+    describe "post create" do
+      it "adds approved reaction" do
+        post :create, reaction: reaction_parameters
+        expect(Reaction.last).to be_approved
+      end
+    end
+  end
+
+  context "Moderator is logged in" do
+    let(:moderator) { FactoryGirl.create(:moderator) }
+
+    before(:each) { session[:user_id] = moderator.id }
+
+    describe "get index" do
+      before(:each) { get :index }
+
+      it "renders reactions/index view" do
+        expect(response).to render_template('reactions/index')
+      end
+
+      it "assigns @reactions" do
+        expect(assigns[:reactions]).to include(reaction)
+      end
+    end
+
     describe "get edit" do
       it "renders reactions/edit view" do
         get :edit, id: reaction.id
@@ -71,10 +122,10 @@ describe ReactionsController do
 
       it "ignores new reaction image" do
         parameters = {
-          id:       reaction,
-          reaction: {
-            image: Rack::Test::UploadedFile.new('spec/support/images/magic2.gif')
-          }
+            id:       reaction,
+            reaction: {
+                image: Rack::Test::UploadedFile.new('spec/support/images/magic2.gif')
+            }
         }
         expect { patch :update, parameters }.not_to change(reaction, :image)
       end
@@ -108,31 +159,51 @@ describe ReactionsController do
     end
   end
 
-  describe "Trusted user is logged in" do
-    let(:trusted_user) { FactoryGirl.create(:trusted_user) }
+  context "Inactive user is logged in" do
+    before(:each) { session[:user_id] = user.id }
 
-    before(:each) { session[:user_id] = trusted_user.id }
-
-    describe "post create" do
-      it "adds approved reaction" do
-        post :create, reaction: reaction_parameters
-        expect(Reaction.last).to be_approved
-      end
+    describe "get new" do
     end
   end
 
   context "User is not logged in" do
     before(:each) { session[:user_id] = nil }
 
-    shared_examples "restricted area" do
-      it "redirects to login page" do
-        expect(response).to redirect_to(login_path)
-      end
+    describe "get new" do
+      before(:each) { get :new }
 
-      it "adds flash message 'Необходима авторизация'" do
-        expect(flash[:notice]).to eq('Необходима авторизация')
-      end
+      it_should_behave_like "restricted area"
     end
+
+    describe "post create" do
+      before(:each) { post :create }
+
+      it_should_behave_like "restricted area"
+    end
+
+    describe "patch update" do
+      before(:each) { patch :update, id: reaction.id }
+
+      it_should_behave_like "restricted area"
+    end
+
+    describe "get edit" do
+      before(:each) { get :edit, id: reaction.id }
+
+      it_should_behave_like "restricted area"
+    end
+
+    describe "get index" do
+      before(:each) { get :index }
+
+      it_should_behave_like "restricted area"
+    end
+  end
+
+  context "Banned user is logged in" do
+    let(:banned_user) { FactoryGirl.create(:banned_user) }
+
+    before(:each) { session[:user_id] = banned_user.id }
 
     describe "get new" do
       before(:each) { get :new }
