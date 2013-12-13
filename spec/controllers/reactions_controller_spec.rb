@@ -15,6 +15,20 @@ describe ReactionsController do
     end
   end
 
+  shared_examples "viewable reaction page" do
+    describe "get show" do
+      before(:each) { get :show, id: reaction.id }
+
+      it "renders view with reaction" do
+        expect(response).to render_template('reactions/show')
+      end
+
+      it "assigns @reaction" do
+        expect(assigns[:reaction]).to eq(reaction)
+      end
+    end
+  end
+
   context "Active user is logged in" do
     before(:each) { session[:user_id] = user.id }
 
@@ -69,6 +83,8 @@ describe ReactionsController do
 
       it_should_behave_like "restricted area"
     end
+
+    it_should_behave_like "viewable reaction page"
   end
 
   context "Trusted user is logged in" do
@@ -82,6 +98,8 @@ describe ReactionsController do
         expect(Reaction.last).to be_approved
       end
     end
+
+    it_should_behave_like "viewable reaction page"
   end
 
   context "Moderator is logged in" do
@@ -157,13 +175,8 @@ describe ReactionsController do
         expect(flash[:notice]).to eq('Реакция удалена')
       end
     end
-  end
 
-  context "Inactive user is logged in" do
-    before(:each) { session[:user_id] = user.id }
-
-    describe "get new" do
-    end
+    it_should_behave_like "viewable reaction page"
   end
 
   context "User is not logged in" do
@@ -198,6 +211,8 @@ describe ReactionsController do
 
       it_should_behave_like "restricted area"
     end
+
+    it_should_behave_like "viewable reaction page"
   end
 
   context "Banned user is logged in" do
@@ -234,19 +249,7 @@ describe ReactionsController do
 
       it_should_behave_like "restricted area"
     end
-  end
 
-  context "Any user" do
-    describe "get show" do
-      before(:each) { get :show, id: reaction.id }
-
-      it "renders view with reaction" do
-        expect(response).to render_template('reactions/show')
-      end
-
-      it "assigns @reaction" do
-        expect(assigns[:reaction]).to eq(reaction)
-      end
-    end
+    it_should_behave_like "viewable reaction page"
   end
 end
