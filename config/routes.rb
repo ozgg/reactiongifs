@@ -5,11 +5,12 @@ Reactiongifs::Application.routes.draw do
     delete 'logout' => :destroy
   end
 
-  resources :reactions
-
-  controller :reactions do
-    get 'pending' => :pending
+  resources :reactions do
+    collection do
+      get 'pending'
+    end
   end
+
 
   root 'index#index'
 
