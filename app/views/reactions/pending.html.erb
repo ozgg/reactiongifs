@@ -1,0 +1,16 @@
+<header>
+  <h2><%= @title %></h2>
+</header>
+<% if @reactions.empty? %>
+    <div class="notice"><%= t('notices.reactions.empty_list') %></div>
+<% else %>
+    <ul>
+      <% @reactions.each do |reaction| %>
+          <li><%= reaction.user.login %>: <%= link_to reaction.title, edit_reaction_path(reaction) %></li>
+      <% end %>
+    </ul>
+    <footer>
+      <%= paginate @reactions %>
+    </footer>
+<% end %>
+

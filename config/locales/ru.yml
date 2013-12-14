@@ -35,3 +35,6 @@ ru:
   authorization:
     insufficient_rights: "Недостаточно прав"
   page: "страница"
+  notices:
+    reactions:
+      empty_list: "Реакций нет"
