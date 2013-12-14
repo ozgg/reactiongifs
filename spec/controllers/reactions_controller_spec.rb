@@ -3,7 +3,7 @@ require 'spec_helper'
 describe ReactionsController do
   let(:user) { FactoryGirl.create(:user) }
   let(:reaction_parameters) { FactoryGirl.attributes_for(:reaction) }
-  let(:reaction) { FactoryGirl.create(:reaction, user: user) }
+  let!(:reaction) { FactoryGirl.create(:reaction, user: user) }
   let!(:approved_reaction) { FactoryGirl.create(:approved_reaction, user: user) }
 
   shared_examples "restricted area" do
@@ -38,6 +38,12 @@ describe ReactionsController do
   shared_examples "restricted editing" do
     describe "get index" do
       before(:each) { get :index }
+
+      it_should_behave_like "restricted area"
+    end
+
+    describe "get pending" do
+      before(:each) { get :pending }
 
       it_should_behave_like "restricted area"
     end
@@ -203,6 +209,22 @@ describe ReactionsController do
 
       it "assigns @reactions" do
         expect(assigns[:reactions]).to include(reaction)
+      end
+    end
+
+    describe "get pending" do
+      before(:each) { get :pending }
+
+      it "should render reactions/pending" do
+        expect(response).to render_template('reactions/pending')
+      end
+
+      it "should have unapproved reaction in @reactions" do
+        expect(assigns[:reactions]).to include(reaction)
+      end
+
+      it "should not have approved reaction in @reactions" do
+        expect(assigns[:reactions]).not_to include(approved_reaction)
       end
     end
 

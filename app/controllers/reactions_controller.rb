@@ -11,6 +11,14 @@ class ReactionsController < ApplicationController
     @reactions = Reaction.order('id desc').page(page).per(20)
   end
 
+  # get /reactions/pending
+  def pending
+    page   = params[:page] || 1
+    @title = "#{t('title.pending_reactions')}, #{t('page')} #{page}"
+
+    @reactions = Reaction.where(:approved => false).page(page).per(20)
+  end
+
   # get /reactions/new
   def new
     @title = 'Добавить реакцию'

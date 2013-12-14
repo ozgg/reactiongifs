@@ -7,6 +7,10 @@ Reactiongifs::Application.routes.draw do
 
   resources :reactions
 
+  controller :reactions do
+    get 'pending' => :pending
+  end
+
   root 'index#index'
 
   # The priority is based upon order of creation: first created -> highest priority.

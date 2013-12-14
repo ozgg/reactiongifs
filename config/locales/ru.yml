@@ -27,8 +27,11 @@ ru:
       previous: "Назад"
       next: "Вперёд"
       truncate: "..."
+  title:
+    pending_reactions: "Ожидают одобрения"
   index:
     index:
       copy_link_to_clipboard: "Скопировать ссылку в буфер обмена"
   authorization:
     insufficient_rights: "Недостаточно прав"
+  page: "страница"
