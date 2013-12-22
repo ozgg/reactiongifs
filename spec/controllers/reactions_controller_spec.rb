@@ -1,10 +1,10 @@
 require 'spec_helper'
 
 describe ReactionsController do
-  let(:user) { FactoryGirl.create(:user) }
+  #let(:user) { FactoryGirl.create(:user) }
   let(:reaction_parameters) { FactoryGirl.attributes_for(:reaction) }
-  let!(:reaction) { FactoryGirl.create(:reaction, user: user) }
-  let!(:approved_reaction) { FactoryGirl.create(:approved_reaction, user: user) }
+  let!(:reaction) { FactoryGirl.create(:reaction) }
+  let!(:approved_reaction) { FactoryGirl.create(:approved_reaction) }
 
   shared_examples "restricted area" do
     it "redirects to login page" do
@@ -25,8 +25,7 @@ describe ReactionsController do
   end
 
   shared_examples "restricted others unapproved reaction page" do
-    let(:other_guy) { FactoryGirl.create(:user, login: 'another_guy') }
-    let(:other_reaction) { FactoryGirl.create(:reaction, user: other_guy) }
+    let(:other_reaction) { FactoryGirl.create(:reaction) }
 
     describe "get show" do
       before(:each) { get :show, id: other_reaction }
@@ -118,6 +117,7 @@ describe ReactionsController do
   end
 
   context "Active user is logged in" do
+    let(:user) { FactoryGirl.create(:user) }
     before(:each) { session[:user_id] = user.id }
 
     it_should_behave_like "restricted editing"
