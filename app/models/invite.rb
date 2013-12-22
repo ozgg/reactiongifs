@@ -16,6 +16,10 @@ class Invite < ActiveRecord::Base
     end
   end
 
+  def usable?
+    invitee.nil?
+  end
+
 private
   def generate_code
     if self.code.nil?

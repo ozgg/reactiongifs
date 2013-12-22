@@ -1,6 +1,8 @@
 require 'spec_helper'
 
 describe Invite do
+  let(:invitee) { FactoryGirl.create(:user) }
+
   it "has user who sends invites" do
     invite = Invite.new(user: nil)
     expect(invite).not_to be_valid
@@ -20,7 +22,6 @@ describe Invite do
   end
 
   it "has invitee when activated" do
-    invitee = FactoryGirl.create(:user)
     invite  = FactoryGirl.create(:invite)
     invite.activate!(invitee)
 
@@ -28,9 +29,20 @@ describe Invite do
   end
 
   it "can assign invitee only once" do
-    invitee = FactoryGirl.create(:user)
     invite  = FactoryGirl.create(:invite, invitee: invitee)
 
     expect{ invite.activate!(invitee) }.to raise_error(RuntimeError)
+  end
+
+  it "is usable with nil invitee" do
+    invite = FactoryGirl.create(:invite)
+
+    expect(invite).to be_usable
+  end
+
+  it "is not usable with non-nil invitee" do
+    invite = FactoryGirl.create(:invite, invitee: invitee)
+
+    expect(invite).not_to be_usable
   end
 end
