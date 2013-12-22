@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe User do
-  before(:each) { @user = FactoryGirl.build(:user) }
+  before(:each) { @user = FactoryGirl.build(:user, login: 'random_guy') }
 
   it 'is invalid when login does not match pattern /\A[a-z0-9_]{1,30}\z/' do
     @user.login = 'bad login'
