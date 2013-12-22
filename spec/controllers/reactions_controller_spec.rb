@@ -153,14 +153,14 @@ describe ReactionsController do
     end
 
     describe "get show for own unapproved reaction" do
-      let(:another_reaction) { FactoryGirl.create(:reaction, user: user) }
+      let(:own_reaction) { FactoryGirl.create(:reaction, user: user) }
 
-      before(:each) { get :show, id: another_reaction }
+      before(:each) { get :show, id: own_reaction }
 
       it_should_behave_like "reaction view renderer"
 
       it "assigns @reaction" do
-        expect(assigns[:reaction]).to eq(another_reaction)
+        expect(assigns[:reaction]).to eq(own_reaction)
       end
     end
   end

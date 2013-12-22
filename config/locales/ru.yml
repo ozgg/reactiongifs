@@ -38,3 +38,9 @@ ru:
   notices:
     reactions:
       empty_list: "Реакций нет"
+  activerecord:
+    models:
+      invite: "Приглашение"
+    errors:
+      invite:
+        already_activated: "Приглашение уже активировано"
