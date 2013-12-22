@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe Reaction do
-  let(:user) { FactoryGirl.create(:user) }
   let(:reaction) { FactoryGirl.build(:reaction) }
 
   it "is valid when has user, title and image" do
@@ -25,7 +24,7 @@ describe Reaction do
   end
 
   it "is invalid without image" do
-    reaction = Reaction.new(user: user, title: 'No image')
+    reaction = Reaction.new(title: 'No image')
     expect(reaction).not_to be_valid
   end
 
