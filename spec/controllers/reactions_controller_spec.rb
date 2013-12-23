@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe ReactionsController do
-  #let(:user) { FactoryGirl.create(:user) }
   let(:reaction_parameters) { FactoryGirl.attributes_for(:reaction) }
   let!(:reaction) { FactoryGirl.create(:reaction) }
   let!(:approved_reaction) { FactoryGirl.create(:approved_reaction) }

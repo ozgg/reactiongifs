@@ -1,6 +1,7 @@
 class UsersController < ApplicationController
   # get /users/new
   def new
+    @title = t('title.register')
   end
 
   # post /users

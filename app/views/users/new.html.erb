@@ -1,2 +1,24 @@
-<h1>Users#new</h1>
-<p>Find me in app/views/users/new.html.erb</p>
+<%= form_for(User.new) do |f| %>
+    <fieldset>
+      <legend><%= @title %></legend>
+      <div>
+        <%= f.label :login %>
+        <%= f.text_field :login %>
+      </div>
+      <div>
+        <%= f.label :password %>
+        <%= f.password_field :password %>
+      </div>
+      <div>
+        <%= f.label :password_confirmation %>
+        <%= f.password_field :password_confirmation %>
+      </div>
+      <div>
+        <%= label_tag :code %>
+        <%= text_field_tag :code %>
+      </div>
+      <div>
+        <%= f.button t('title.register'), type: 'submit' %>
+      </div>
+    </fieldset>
+<% end %>
