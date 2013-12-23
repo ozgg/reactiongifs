@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe UsersController do
-  let(:invite) { FactoryGirl.create(:invite) }
+  let!(:invite) { FactoryGirl.create(:invite) }
   let(:user_parameters) do
     {
         user: FactoryGirl.attributes_for(:user),
@@ -9,11 +9,24 @@ describe UsersController do
     }
   end
 
-  describe "get new" do
-    before(:each) { get :new }
+  shared_examples "no new users and re-rendering users/new" do
+    it "creates no users" do
+      expect { post :create, user_parameters }.not_to change(User, :count)
+    end
 
-    it "renders users/new view" do
+    it "redirects to users/new" do
+      post :create, user_parameters
       expect(response).to render_template('users/new')
+    end
+  end
+
+  context "rendering form" do
+    describe "get new" do
+      before(:each) { get :new }
+
+      it "renders users/new view" do
+        expect(response).to render_template('users/new')
+      end
     end
   end
 
@@ -48,12 +61,32 @@ describe UsersController do
 
   context "invalid invite" do
     describe "post create" do
-      let(:invite) { FactoryGirl.create(:invite, invitee: FactoryGirl.create(:user)) }
+      before(:each) do
+        invite.invitee = FactoryGirl.create(:user)
+        invite.save
+      end
 
-      before(:each) { post :create }
-      it "creates no users"
-      it "adds flash message with error"
-      it "redirects to users/new"
+      it "adds flash message with error" do
+        post :create, user_parameters
+        expect(flash[:message]).to eq(I18n.t('users.create.bad_code'))
+      end
+
+      it_should_behave_like "no new users and re-rendering users/new"
     end
+  end
+
+  context "invalid user parameters" do
+    let(:user_parameters) do
+      {
+          user: {
+              login: '!!!',
+              password: '1234',
+              password_confirmation: '4321'
+          },
+          code: invite.code
+      }
+    end
+
+    it_should_behave_like "no new users and re-rendering users/new"
   end
 end

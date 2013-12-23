@@ -5,13 +5,13 @@ class UsersController < ApplicationController
 
   # post /users
   def create
-    check_invite
-    @user = User.new(creation_parameters)
-    @user.save
-    session[:user_id] = @user.id
-    activate_invite
-    flash[:message] = t('users.create.success')
-    redirect_to root_path
+    init_invite
+    if invite_is_good
+      create_user
+    else
+      flash[:message] = t('users.create.bad_code')
+      render action: 'new'
+    end
   end
 
   private
@@ -20,13 +20,31 @@ class UsersController < ApplicationController
     params.require(:user).permit([:login, :password, :password_confirmation])
   end
 
-  def check_invite
+  def init_invite
     @invite = Invite.find_by_code(params[:code])
   end
 
   def activate_invite
-    unless @invite.nil? || !@invite.usable?
-      @invite.activate!(@user)
+    @invite.activate!(@user) if invite_is_good
+  end
+
+  def invite_is_good
+    !@invite.nil? && @invite.usable?
+  end
+
+  def create_user
+    @user = User.new(creation_parameters)
+    if @user.save
+      post_create_actions
+    else
+      render action: 'new'
     end
+  end
+
+  def post_create_actions
+    session[:user_id] = @user.id
+    activate_invite
+    flash[:message] = t('users.create.success')
+    redirect_to root_path
   end
 end

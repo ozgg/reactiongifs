@@ -35,6 +35,7 @@ ru:
   users:
     create:
       success: "Регистрация прошла успешно. Вы вошли."
+      bad_code: "Код недействителен"
   authorization:
     insufficient_rights: "Недостаточно прав"
   page: "страница"
