@@ -10,7 +10,8 @@ class UsersController < ApplicationController
     if invite_is_good
       create_user
     else
-      flash[:message] = t('users.create.bad_code')
+      flash[:notice] = t('users.create.bad_code')
+      @title = t('title.register')
       render action: 'new'
     end
   end
@@ -45,7 +46,7 @@ class UsersController < ApplicationController
   def post_create_actions
     session[:user_id] = @user.id
     activate_invite
-    flash[:message] = t('users.create.success')
+    flash[:notice] = t('users.create.success')
     redirect_to root_path
   end
 end

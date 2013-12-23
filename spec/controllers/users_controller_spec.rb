@@ -54,7 +54,7 @@ describe UsersController do
       end
 
       it "adds flash message 'Регистрация прошла успешно'" do
-        expect(flash[:message]).to eq(I18n.t('users.create.success'))
+        expect(flash[:notice]).to eq(I18n.t('users.create.success'))
       end
     end
   end
@@ -68,7 +68,7 @@ describe UsersController do
 
       it "adds flash message with error" do
         post :create, user_parameters
-        expect(flash[:message]).to eq(I18n.t('users.create.bad_code'))
+        expect(flash[:notice]).to eq(I18n.t('users.create.bad_code'))
       end
 
       it_should_behave_like "no new users and re-rendering users/new"
