@@ -2,6 +2,7 @@ class UsersController < ApplicationController
   # get /users/new
   def new
     @title = t('title.register')
+    @user  = User.new
   end
 
   # post /users
@@ -12,6 +13,7 @@ class UsersController < ApplicationController
     else
       flash[:notice] = t('users.create.bad_code')
       @title = t('title.register')
+      @user  = User.new
       render action: 'new'
     end
   end

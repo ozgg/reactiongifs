@@ -1,6 +1,18 @@
-<%= form_for(User.new) do |f| %>
+<%= form_for(@user) do |f| %>
+    <% if @user.errors.any? %>
+        <div id="error_explanation">
+          <h2><%= pluralize(@user.errors.count, "error") %> prohibited this user from being saved:</h2>
+
+          <ul>
+            <% @user.errors.full_messages.each do |msg| %>
+                <li><%= msg %></li>
+            <% end %>
+          </ul>
+        </div>
+    <% end %>
+
     <fieldset>
-      <legend><%= @title %></legend>
+      <legend><%= t('title.register') %></legend>
       <div>
         <%= f.label :login %>
         <%= f.text_field :login %>
