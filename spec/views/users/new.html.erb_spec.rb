@@ -2,6 +2,7 @@ require 'spec_helper'
 
 describe "users/new.html.erb" do
   it 'displays form with user fields' do
+    assign(:user, User.new)
     render
     form_parameters = {
         method: 'post',
