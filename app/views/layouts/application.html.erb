@@ -1,20 +1,28 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="utf-8" />
+  <meta charset="utf-8"/>
   <title><%= @title || 'Без названия' %> :: Reactiongifs</title>
-  <%= stylesheet_link_tag    "application", media: "all", "data-turbolinks-track" => true %>
+  <%= stylesheet_link_tag "application", media: "all", "data-turbolinks-track" => true %>
   <%= javascript_include_tag "application", "data-turbolinks-track" => true %>
   <%= csrf_meta_tags %>
 </head>
 <body>
 <header>
   <h1>Реакции в GIF-картинках</h1>
+  <% unless session[:user_id].nil? %>
+      <nav>
+        <ul>
+          <li><%= link_to 'new reaction', new_reaction_path %></li>
+          <li><%= link_to 'log out', logout_path, method: :delete %></li>
+        </ul>
+      </nav>
+  <% end %>
 </header>
 
 <section id="content">
   <% unless flash[:notice].nil? %>
-<div class="notice"><%= flash[:notice] %></div>
+      <div class="notice"><%= flash[:notice] %></div>
   <% end %>
 
   <%= yield %>
@@ -24,7 +32,7 @@
   <aside>version 0.2.0beta</aside>
   <div>&#0169; 2013 reactiongifs.ru</div>
   <% if Rails.env.production? %>
-  <%= render 'index/metrics' %>
+      <%= render 'index/metrics' %>
   <% end %>
 </footer>
 </body>
