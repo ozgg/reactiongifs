@@ -32,6 +32,9 @@ ru:
   index:
     index:
       copy_link_to_clipboard: "Скопировать ссылку в буфер обмена"
+  users:
+    create:
+      success: "Регистрация прошла успешно. Вы вошли."
   authorization:
     insufficient_rights: "Недостаточно прав"
   page: "страница"
