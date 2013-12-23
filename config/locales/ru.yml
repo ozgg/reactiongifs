@@ -37,6 +37,8 @@ ru:
     create:
       success: "Регистрация прошла успешно. Вы вошли."
       bad_code: "Код недействителен"
+    new:
+      code: "Пригласительный код"
   authorization:
     insufficient_rights: "Недостаточно прав"
   page: "страница"
@@ -46,6 +48,12 @@ ru:
   activerecord:
     models:
       invite: "Приглашение"
+      user: "Пользователь"
+    attributes:
+      user:
+        login: "Имя пользователя"
+        password: "Пароль"
+        password_confirmation: "Подтверждение пароля"
     errors:
       invite:
         already_activated: "Приглашение уже активировано"
